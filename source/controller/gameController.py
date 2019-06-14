@@ -2,12 +2,13 @@ from model.gameModel import *
 from view.gameView import *
 from exceptions.exceptions import *
 
+
 class GameController:
     __gameModel: GameModel
     @property
     def gameModel(self):
         return self.__gameModel
-    
+
     __gameView: GameView
     @property
     def gameView(self):
@@ -16,7 +17,7 @@ class GameController:
     def __init__(self, gameModel: GameModel, gameView: GameView):
         self.__gameModel = gameModel
         self.__gameView = gameView
-    
+
     def createGameBoard(self):
         fieldsPerLine = self.__gameModel.DEFAULT_FIELDS_PER_LINE
         while True:
@@ -30,11 +31,11 @@ class GameController:
                 self.__gameView.printWrongAnswerToYesNoQuestion()
         if(answer == "no"):
             fieldsPerLine = self.__getFieldsPerLineFromUserInput()
-        
+
         #self.__gameModel.__gameBoard = GameBoard(fieldsPerLine)
         self.__gameModel.createGameBoard(fieldsPerLine)
         self.__gameModel.gameBoard.setInitialGameBoardState()
-        #print(self.__gameModel.gameBoard.gameBoardList)
+        # print(self.__gameModel.gameBoard.gameBoardList)
 
     def __isStringValueYesOrNo(self, inputString):
         if(inputString == "yes" or inputString == "no"):
@@ -59,6 +60,9 @@ class GameController:
         if(number < 3 or number > 6):
             return False
         return True
-    
+
     def displayGameBoard(self):
         self.__gameView.printGameBoard(self.__gameModel.gameBoard)
+
+    def solve(self):
+        pass

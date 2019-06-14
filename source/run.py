@@ -5,6 +5,7 @@ from exceptions.exceptions import *
 
 import sys
 
+
 class Main:
     def main(args):
         gameModel = GameModel()
@@ -13,6 +14,9 @@ class Main:
 
         gameController.createGameBoard()
         gameController.displayGameBoard()
-    
+
+        gameController.solve()
+        gameController.displayGameBoard()
+
     if __name__ == '__main__':
         main(sys.argv)
