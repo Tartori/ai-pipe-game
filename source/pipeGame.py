@@ -4,10 +4,12 @@ class GameBoard:
     gameBoard = []
 
     def initializeGameBoard(self, fieldsPerLine):
+        
         threeSomeGameField = GameField(False, True, True, True)
         twoSomeField = GameField(False, False, True, True)
         forSomeField = GameField(True, True, True, True)
         totalAmountOfFields = fieldsPerLine * fieldsPerLine
+        '''
         GameBoard.gameBoard.append(threeSomeGameField)
         GameBoard.gameBoard.append(forSomeField)
         GameBoard.gameBoard.append(twoSomeField)
@@ -18,15 +20,14 @@ class GameBoard:
         GameBoard.gameBoard.append(twoSomeField)
         GameBoard.gameBoard.append(forSomeField)
         '''
+        
         for i in range(0, totalAmountOfFields):
-            print(i)
             if(i == 2):
-                print("Got here")
                 GameBoard.gameBoard.append(twoSomeField)
+            elif(i == 9):
+                GameBoard.gameBoard.append(forSomeField)
             else:
                 GameBoard.gameBoard.append(threeSomeGameField)
-        '''
-
     
     def isUneven(self, number):
         result = number % 2
@@ -63,8 +64,11 @@ class GameField:
 # --- View ---
 class GameBoardView:
 
-    def printBoarderLine(self):
-        print("|---------|---------|---------|")
+    def printBoarderLine(self, fieldsPerLine):
+        borderLine = "|"
+        for x in range(0, fieldsPerLine):
+            borderLine += "---------|"
+        print(borderLine)
 
     def displayGameBoard(self, gameBoard: GameBoard):
         amountOfGameFields = len(gameBoard)
@@ -73,7 +77,7 @@ class GameBoardView:
         lineCount = 0
         currentLine = ""
 
-        self.printBoarderLine()
+        self.printBoarderLine(amountOfLineFields)
         # foreach line
         for line in range(0, amountOfLines):
             # PRINT TOPLINE
@@ -124,7 +128,7 @@ class GameBoardView:
             # PRINTBOTTOMLINE
 
             # PRINTBOARDERLINE
-            self.printBoarderLine()
+            self.printBoarderLine(amountOfLineFields)
             # PRINTBOARDERLINE
 
 # --- Main ---
@@ -132,6 +136,27 @@ class Main:
     def printBoarderLine():
         print("|---------|---------|---------|")
     
+    def printExampleOfGameFieldWithInputAndOutput(self):
+        self.printBoarderLine()
+        print("|XXX ^ XXX|XXX | XXX|XXXXXXXXX|")
+        print("|XXX | XXX|XXX v XXX|XXXXXXXXX|")
+        print("|-->   -->|-->   -->|-->   <--|")
+        print("|XXX | XXX|XXXXXXXXX|XXX | XXX|")
+        print("|XXX v XXX|XXXXXXXXX|XXX v XXX|")
+        self.printBoarderLine()
+        print("|XXX | XXX|XXX ^ XXX|XXX | XXX|")
+        print("|XXX v XXX|XXX | XXX|XXX v XXX|")
+        print("|XXX   <--|-->   -->|-->   -->|")
+        print("|XXX ^ XXX|XXXXXXXXX|XXX | XXX|")
+        print("|XXX | XXX|XXXXXXXXX|XXX v XXX|")
+        self.printBoarderLine()
+        print("|XXX ^ XXX|XXX ^ XXX|XXX | XXX|")
+        print("|XXX | XXX|XXX | XXX|XXX v XXX|")
+        print("|XXX   -->|XXX   -->|XXX   -->|")
+        print("|XXXXXXXXX|XXX | XXX|XXX | XXX|")
+        print("|XXXXXXXXX|XXX v XXX|XXX v XXX|")
+        self.printBoarderLine()
+
     def printExampleOfGameField(self):
         self.printBoarderLine()
         print("|XXX   XXX|XXX   XXX|XXXXXXXXX|")
@@ -182,10 +207,13 @@ class Main:
         print("")
         print("Only threeSome elements:")
         self.printSimpleExampleOnlyThreeSomeElements(self)
+        print("")
+        print("Example with Inputs and Outputs")
+        self.printExampleOfGameFieldWithInputAndOutput(self)
         print("--- EXAMPLES ---")
         print("")
 
-        fieldsPerLine = 3
+        fieldsPerLine = 5
         gameBoard = GameBoard()
         gameBoardView = GameBoardView()
         gameBoard.gameBoard = gameBoard.initializeGameBoard(fieldsPerLine)
