@@ -6,6 +6,11 @@ from copy import deepcopy
 
 
 class GameField:
+    __id: int
+    @property
+    def id(self):
+        return self.__id
+
     __isTopOpen: int
     @property
     def isTopOpen(self):
@@ -26,23 +31,44 @@ class GameField:
     def isLeftOpen(self):
         return self.__isLeftOpen
 
+    __left_field: None
+    @property
+    def left_field(self):
+        return self.__left_field
+
+    __upper_field: None
+    @property
+    def upper_field(self):
+        return self.__upper_field
+
     def has_entry_and_exit(self):
         return ((self.__isTopOpen == -1 or self.__isBottomOpen == -1 or self.__isRightOpen == -1 or self.__isLeftOpen == -1)) and (self.__isTopOpen == 1 or self.__isBottomOpen == 1 or self.__isRightOpen == 1 or self.__isLeftOpen == 1)
 
-    def __init__(self, isTopOpen: int, isRightOpen: int, isBottomOpen: int, isLeftOpen: int):
+    def __init__(self, id: int, isTopOpen: int, isRightOpen: int, isBottomOpen: int, isLeftOpen: int, leftField, upperfield):
+        self.__id = id
         self.__isTopOpen = isTopOpen
         self.__isRightOpen = isRightOpen
         self.__isBottomOpen = isBottomOpen
         self.__isLeftOpen = isLeftOpen
+        self.__left_field = leftField
+        self.__upper_field = upperfield
+
+    def has_water(self):
+        if self.__upper_field is None and self.__left_field is None:
+            return True
+        if self.__upper_field is not None and self.__isTopOpen == 1 and self.__upper_field.isBottomOpen == -1 and self.__upper_field.has_water():
+            return True
+        return self.__left_field is not None and self.__isLeftOpen == 1 and self.__left_field.isRightOpen == -1 and self.__left_field.has_water()
 
     def turnField(self):
-        return self.rightTurn()
+        self.rightTurn()
 
     def rightTurn(self):
-        return GameField(self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__isTopOpen)
+        self.__id += 100
+        self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__isTopOpen = self.__isTopOpen, self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen
 
     def __repr__(self):
-        return f'GameField({self.__isTopOpen},{self.__isRightOpen},{self.__isBottomOpen},{self.__isLeftOpen})'
+        return f'GameField({self.__id},{self.__isTopOpen},{self.__isRightOpen},{self.__isBottomOpen},{self.__isLeftOpen},{self.has_water()},{self.__left_field.id if self.__left_field is not None else -1},{self.__upper_field.id if self.__upper_field is not None else -1})'
 
 
 class GameBoard:
@@ -88,20 +114,28 @@ class GameBoard:
         self.__resetGameBoardState()
 
     def turn_field(self, line, column):
-        self.__gameBoardList[line][column] = self.__gameBoardList[line][column].turnField(
-        )
+        self.__gameBoardList[line][column].turnField()
 
     def __resetGameBoardState(self):
+        self.__gameBoardList[0][0] = GameField(0, -1, -1, -1, -1, None, None)
         for lineIndex, line in enumerate(self.__gameBoardList):
             for fieldIndex, _ in enumerate(line):
+                if(lineIndex == 0 and fieldIndex == 0):
+                    continue
                 self.__gameBoardList[lineIndex][fieldIndex] = self.__getRandomGameField(
-                )
+                    lineIndex*10+fieldIndex,
+                    self.__gameBoardList[lineIndex][fieldIndex -
+                                                    1] if fieldIndex > 0 else None,
+                    self.__gameBoardList[lineIndex -
+                                         1][fieldIndex] if lineIndex > 0 else None,)
+        self.__gameBoardList[lineIndex][fieldIndex] = GameField(lineIndex*10+fieldIndex,
+                                                                1, 1, 1, 1,  self.__gameBoardList[lineIndex][fieldIndex-1],  self.__gameBoardList[lineIndex-1][fieldIndex])
 
-    def __getRandomGameField(self):
+    def __getRandomGameField(self, id, left, upper):
         gameField = None
         while(gameField is None or not gameField.has_entry_and_exit()):
-            gameField = GameField(self.__getRandomState(), self.__getRandomState(
-            ), self.__getRandomState(), self.__getRandomState())
+            gameField = GameField(id, self.__getRandomState(), self.__getRandomState(
+            ), self.__getRandomState(), self.__getRandomState(), left, upper)
         return gameField
 
     def __getRandomState(self):

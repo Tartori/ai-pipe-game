@@ -7,6 +7,7 @@ import sys
 
 
 class Main:
+    @staticmethod
     def main(args):
         gameModel = GameModel()
         gameView = GameView()
@@ -18,5 +19,6 @@ class Main:
         gameController.solve()
         gameController.displayGameBoard()
 
-    if __name__ == '__main__':
-        main(sys.argv)
+
+if __name__ == '__main__':
+    Main.main(sys.argv)

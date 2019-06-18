@@ -59,7 +59,7 @@ class GameView:
                 currentLine += " o "
             else:
                 currentLine += "XXX"
-            currentLine += "   "
+            currentLine += " w " if field.has_water() else "   "
             if(field.isRightOpen == 1):
                 currentLine += " i "
             elif(field.isRightOpen == -1):

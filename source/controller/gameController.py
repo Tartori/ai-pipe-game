@@ -39,7 +39,7 @@ class GameController:
         # print(self.__gameModel.gameBoard.gameBoardList)
 
     def __isStringValueYesOrNo(self, inputString):
-        if(inputString == "yes" or inputString == "no"):
+        if(inputString == "y" or inputString == "yes" or inputString == "no"):
             return True
         return False
 
