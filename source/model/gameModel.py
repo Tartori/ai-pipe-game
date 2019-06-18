@@ -1,38 +1,44 @@
+#!/usr/bin/env python3.7
+
 import random
+from enum import Enum
 
 
 class GameField:
-    __isTopOpen: bool
+    __isTopOpen: int
     @property
     def isTopOpen(self):
         return self.__isTopOpen
 
-    __isRightOpen: bool
+    __isRightOpen: int
     @property
     def isRightOpen(self):
         return self.__isRightOpen
 
-    __isBottomOpen: bool
+    __isBottomOpen: int
     @property
     def isBottomOpen(self):
         return self.__isBottomOpen
 
-    __isLeftOpen: bool
+    __isLeftOpen: int
     @property
     def isLeftOpen(self):
         return self.__isLeftOpen
 
-    def __init__(self, isTopOpen: bool, isRightOpen: bool, isBottomOpen: bool, isLeftOpen: bool):
+    def has_entry_and_exit(self):
+        return ((self.__isTopOpen == -1 or self.__isBottomOpen == -1 or self.__isRightOpen == -1 or self.__isLeftOpen == -1)) and (self.__isTopOpen == 1 or self.__isBottomOpen == 1 or self.__isRightOpen == 1 or self.__isLeftOpen == 1)
+
+    def __init__(self, isTopOpen: int, isRightOpen: int, isBottomOpen: int, isLeftOpen: int):
         self.__isTopOpen = isTopOpen
         self.__isRightOpen = isRightOpen
         self.__isBottomOpen = isBottomOpen
         self.__isLeftOpen = isLeftOpen
 
     def turnField(self):
-        self.rightTurn()
+        return self.rightTurn()
 
     def rightTurn(self):
-        self.__isTopOpen, self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen = self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__isTopOpen
+        return GameField(self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__isTopOpen)
 
 
 class GameBoard:
@@ -68,9 +74,9 @@ class GameBoard:
 
     def createEmpytyGameBoard(self, fieldsPerLine):
         gameBoardLines = fieldsPerLine
-        for i in range(gameBoardLines):
+        for _ in range(gameBoardLines):
             line = []
-            for i in range(fieldsPerLine):
+            for _ in range(fieldsPerLine):
                 line.append(None)
             self.__gameBoardList.append(line)
 
@@ -78,22 +84,33 @@ class GameBoard:
         self.__resetGameBoardState()
 
     def __resetGameBoardState(self):
-        threeSomeGameField = GameField(False, True, True, True)
-        twoSomeField = GameField(False, False, True, True)
-        forSomeField = GameField(True, True, True, True)
+        threeSomeGameField = GameField(0, 1, 1, 1)
+        twoSomeField = GameField(0, 0, 1, 1)
+        forSomeField = GameField(1, 1, 1, 1)
 
         for lineIndex, line in enumerate(self.__gameBoardList):
-            for fieldIndex, field in enumerate(line):
+            for fieldIndex, _ in enumerate(line):
                 self.__gameBoardList[lineIndex][fieldIndex] = self.__getRandomGameField(
                 )
 
     def __getRandomGameField(self):
-        gameField = GameField(self.__getRandomBoolean(), self.__getRandomBoolean(
-        ), self.__getRandomBoolean(), self.__getRandomBoolean())
+        gameField = None
+        while(gameField is None or not gameField.has_entry_and_exit()):
+            gameField = GameField(self.__getRandomState(), self.__getRandomState(
+            ), self.__getRandomState(), self.__getRandomState())
         return gameField
 
-    def __getRandomBoolean(self):
-        return bool(random.getrandbits(1))
+    def __getRandomState(self):
+        r = 4
+        while(r > 2):
+            r = random.getrandbits(2)
+        return r-1
+
+
+class Direction(Enum):
+    In = 1
+    Out = -1
+    Closed = 0
 
 
 class GameModel:

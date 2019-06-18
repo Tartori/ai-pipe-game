@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.7
 from model.gameModel import *
 from view.gameView import *
 from exceptions.exceptions import *
