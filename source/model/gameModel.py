@@ -2,6 +2,7 @@
 
 import random
 from enum import Enum
+from copy import deepcopy
 
 
 class GameField:
@@ -39,6 +40,9 @@ class GameField:
 
     def rightTurn(self):
         return GameField(self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__isTopOpen)
+
+    def __repr__(self):
+        return f'GameField({self.__isTopOpen},{self.__isRightOpen},{self.__isBottomOpen},{self.__isLeftOpen})'
 
 
 class GameBoard:
@@ -83,11 +87,11 @@ class GameBoard:
     def setInitialGameBoardState(self):
         self.__resetGameBoardState()
 
-    def __resetGameBoardState(self):
-        threeSomeGameField = GameField(0, 1, 1, 1)
-        twoSomeField = GameField(0, 0, 1, 1)
-        forSomeField = GameField(1, 1, 1, 1)
+    def turn_field(self, line, column):
+        self.__gameBoardList[line][column] = self.__gameBoardList[line][column].turnField(
+        )
 
+    def __resetGameBoardState(self):
         for lineIndex, line in enumerate(self.__gameBoardList):
             for fieldIndex, _ in enumerate(line):
                 self.__gameBoardList[lineIndex][fieldIndex] = self.__getRandomGameField(

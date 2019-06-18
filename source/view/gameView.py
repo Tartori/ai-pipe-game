@@ -1,4 +1,5 @@
 from model.gameModel import *
+from pprint import pprint
 
 
 class GameView:
@@ -20,67 +21,65 @@ class GameView:
 
     def printGameBoard(self, gameBoard: GameBoard):
         print("Game Board:")
+        pprint(gameBoard.gameBoardList)
         print("")
         self.__printBoarderLine(gameBoard)
-        for lineIndex, line in enumerate(gameBoard.gameBoardList):
-            self.__printGameBoardTopValuesFromLine(gameBoard, line, lineIndex)
-            self.__printGameBoardLeftRightValuesFromLine(
-                gameBoard, line, lineIndex)
-            self.__printGameBoardBottomValuesFromLine(
-                gameBoard, line, lineIndex)
+        for line in gameBoard.gameBoardList:
+            self.__printGameBoardTopValuesFromLine(line)
+            self.__printGameBoardLeftRightValuesFromLine(line)
+            self.__printGameBoardBottomValuesFromLine(line)
             self.__printBoarderLine(gameBoard)
 
     def __printBoarderLine(self, gameBoard: GameBoard):
         borderLine = "|"
-        for x in range(0, gameBoard.fieldsPerLine):
+        for _ in range(gameBoard.fieldsPerLine):
             borderLine += "---------|"
         print(borderLine)
 
-    def __printGameBoardTopValuesFromLine(self, gameBoard: GameBoard, line, lineIndex):
+    def __printGameBoardTopValuesFromLine(self,  line):
         # 2 times
-        for i in range(0, 2):
+        for _ in range(2):
             currentLine = "|"
-            for fieldIndex, _ in enumerate(line):
-                if(gameBoard.gameBoardList[lineIndex][fieldIndex].isTopOpen == 1):
-                    currentGameFieldValue = "XXX i XXX"
-                elif(gameBoard.gameBoardList[lineIndex][fieldIndex].isTopOpen == -1):
-                    currentGameFieldValue = "XXX o XXX"
+            for field in line:
+                if(field.isTopOpen == 1):
+                    currentLine += "XXX i XXX"
+                elif(field.isTopOpen == -1):
+                    currentLine += "XXX o XXX"
                 else:
-                    currentGameFieldValue = "XXXXXXXXX"
-                currentLine += currentGameFieldValue + "|"
+                    currentLine += "XXXXXXXXX"
+                currentLine += "|"
             print(currentLine)
-            currentLine = ""
 
-    def __printGameBoardLeftRightValuesFromLine(self, gameBoard: GameBoard, line, lineIndex):
+    def __printGameBoardLeftRightValuesFromLine(self, line):
         currentLine = "|"
-        for fieldIndex, lineField in enumerate(line):
-            if(gameBoard.gameBoardList[lineIndex][fieldIndex].isLeftOpen == 1):
-                currentGameFieldValue = " i "
-            elif(gameBoard.gameBoardList[lineIndex][fieldIndex].isLeftOpen == -1):
-                currentGameFieldValue = " o "
+        for field in line:
+            if(field.isLeftOpen == 1):
+                currentLine += " i "
+            elif(field.isLeftOpen == -1):
+                currentLine += " o "
             else:
-                currentGameFieldValue = "XXX"
-            currentLine += currentGameFieldValue + "   "
-            if(gameBoard.gameBoardList[lineIndex][fieldIndex].isRightOpen == 1):
-                currentGameFieldValue = " i "
-            elif(gameBoard.gameBoardList[lineIndex][fieldIndex].isRightOpen == -1):
-                currentGameFieldValue = " o "
+                currentLine += "XXX"
+            currentLine += "   "
+            if(field.isRightOpen == 1):
+                currentLine += " i "
+            elif(field.isRightOpen == -1):
+                currentLine += " o "
             else:
-                currenGameFieldValue = "XXX"
-            currentLine += currentGameFieldValue + "|"
+                currentLine += "XXX"
+            currentLine += "|"
         print(currentLine)
 
-    def __printGameBoardBottomValuesFromLine(self, gameBoard: GameBoard, line, lineIndex):
+    def __printGameBoardBottomValuesFromLine(self, line):
         # 2 times
-        for i in range(0, 2):
+        for _ in range(2):
             currentLine = "|"
-            for fieldIndex, lineField in enumerate(line):
-                if(gameBoard.gameBoardList[lineIndex][fieldIndex].isBottomOpen == 1):
-                    currentGameFieldValue = "XXX i XXX"
-                elif(gameBoard.gameBoardList[lineIndex][fieldIndex].isBottomOpen == -1):
-                    currentGameFieldValue = "XXX o XXX"
+            for field in line:
+                if(field.isBottomOpen == 1):
+                    currentLine += "XXX i XXX"
+                elif(field.isBottomOpen == -1):
+                    currentLine += "XXX o XXX"
                 else:
-                    currentGameFieldValue = "XXXXXXXXX"
-                currentLine += currentGameFieldValue + "|"
+                    currentLine += "XXXXXXXXX"
+                currentLine += "|"
             print(currentLine)
             currentLine = ""

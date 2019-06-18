@@ -66,4 +66,28 @@ class GameController:
         self.__gameView.printGameBoard(self.__gameModel.gameBoard)
 
     def solve(self):
-        pass
+        self.__reached_states = set()
+        self.solve_recursively(self.__gameModel.gameBoard)
+
+    def solve_recursively(self, board,):
+        """
+        for pawn in game.get_movable_pawns():
+            for move in game.get_moves_for_pawn(pawn):
+                movegame = deepcopy(game)
+                movegame.do_move(pawn, move)
+                movegame.to_next_turn()
+                if movegame.get_winner() is not None:
+                    return 100, pawn, move
+                (opp, _, _) = self.__find_best_solution_rec(
+                    depth-1, movegame, alpha)
+                sol = -opp
+                if(sol < alpha):
+                    break
+                alphamove = move
+                alphapawn = pawn
+                alpha = sol
+        """
+        self.__reached_states.add(board)
+        for line in range(board.lines):
+            for column in range(board.fieldsPerLine):
+                board.turn_field(line, column)
