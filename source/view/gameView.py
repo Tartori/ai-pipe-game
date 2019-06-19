@@ -23,6 +23,8 @@ class GameView:
         print("Game Board:")
         pprint(gameBoard.gameBoardList)
         print("")
+        pprint(gameBoard.moves)
+        print("")
         self.__printBoarderLine(gameBoard)
         for line in gameBoard.gameBoardList:
             self.__printGameBoardTopValuesFromLine(line)

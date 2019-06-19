@@ -3,9 +3,19 @@
 import random
 from enum import Enum
 from copy import deepcopy
+from pprint import pprint
 
 
 class GameField:
+    def __key(self):
+        return (self.__id, self.__isTopOpen, self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__upper_field, self.__left_field)
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        return isinstance(self, type(other)) and self.__key() == other.__key()
+
     __id: int
     @property
     def id(self):
@@ -64,7 +74,6 @@ class GameField:
         self.rightTurn()
 
     def rightTurn(self):
-        self.__id += 100
         self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen, self.__isTopOpen = self.__isTopOpen, self.__isRightOpen, self.__isBottomOpen, self.__isLeftOpen
 
     def __repr__(self):
@@ -72,6 +81,16 @@ class GameField:
 
 
 class GameBoard:
+
+    def __key(self):
+        return (tuple(tuple(x) for x in self.__gameBoardList))
+
+    def __hash__(self):
+        return hash(self.__gameBoardList[self.__lines-1][self.__fieldsPerLine-1])
+
+    def __eq__(self, other):
+        return isinstance(self, type(other)) and self.__key() == other.__key()
+
     __gameBoardList = []
     @property
     def gameBoardList(self):
@@ -86,6 +105,11 @@ class GameBoard:
     def fieldsPerLine(self):
         return self.__fieldsPerLine
 
+    __moves = []
+    @property
+    def moves(self):
+        return self.__moves
+
     __lines = 0
     @property
     def lines(self):
@@ -97,6 +121,7 @@ class GameBoard:
         return self.__totalFields
 
     def __init__(self, fieldsPerline):
+        self.__moves = []
         self.createEmpytyGameBoard(fieldsPerline)
         self.__lines = len(self.__gameBoardList)
         self.__fieldsPerLine = len(self.__gameBoardList[0])
@@ -114,7 +139,12 @@ class GameBoard:
         self.__resetGameBoardState()
 
     def turn_field(self, line, column):
+        self.__gameBoardList = deepcopy(self.__gameBoardList)
         self.__gameBoardList[line][column].turnField()
+        self.__moves.append((line, column))
+
+    def is_done(self,):
+        return self.__gameBoardList[self.__lines-1][self.__fieldsPerLine-1].has_water()
 
     def __resetGameBoardState(self):
         self.__gameBoardList[0][0] = GameField(0, -1, -1, -1, -1, None, None)
