@@ -72,10 +72,20 @@ class GameController:
 
     def solve(self):
         self.__reached_states = []
-        self.__gameModel.__gameBoard = self.solve_recursively(
-            [self.__gameModel.gameBoard])
+        prev_turns = 0
+        board = self.__gameModel.gameBoard
+        turns = 1
+        depth = 0
+        while not board.is_done() and not turns == prev_turns:
+            depth += 1
+            self.__reached_states = []
+            (board, turns) = self.__gameModel.__gameBoard = self.solve_recursively(
+                [self.__gameModel.gameBoard], depth)
+        print(depth)
+        pprint(board.moves)
+        self.__gameView.printGameBoard(board, True)
 
-    def solve_recursively(self, moves, ):
+    def solve_recursively(self, moves, depth,):
         """
         for pawn in game.get_movable_pawns():
             for move in game.get_moves_for_pawn(pawn):
@@ -96,8 +106,12 @@ class GameController:
         board = moves.pop()
         moves.append(board)
         self.__reached_states.append(board)
+        turns = 0
         while not board.is_done() and len(moves) > 0:
+            turns += 1
             board = moves.pop()
+            if len(board.moves) > depth:
+                continue
             for line in range(board.lines):
                 for column in range(board.fieldsPerLine):
                     moveboard = deepcopy(board)
@@ -106,4 +120,4 @@ class GameController:
                         continue
                     self.__reached_states.append(moveboard)
                     moves.append(moveboard)
-        self.__gameView.printGameBoard(board, True)
+        return board, turns

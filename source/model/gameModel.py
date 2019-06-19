@@ -141,6 +141,7 @@ class GameBoard:
     def turn_field(self, line, column):
         self.__gameBoardList = deepcopy(self.__gameBoardList)
         self.__gameBoardList[line][column].turnField()
+        self.__moves = deepcopy(self.__moves)
         self.__moves.append((line, column))
 
     def is_done(self,):
