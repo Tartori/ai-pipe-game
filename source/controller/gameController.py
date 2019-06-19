@@ -20,6 +20,7 @@ class GameController:
     def __init__(self, gameModel: GameModel, gameView: GameView):
         self.__gameModel = gameModel
         self.__gameView = gameView
+        self.__alreadyPrinted = False
 
     def createGameBoard(self):
         fieldsPerLine = self.__gameModel.DEFAULT_FIELDS_PER_LINE
@@ -65,11 +66,14 @@ class GameController:
         return True
 
     def displayGameBoard(self):
-        self.__gameView.printGameBoard(self.__gameModel.gameBoard)
+        self.__gameView.printGameBoard(
+            self.__gameModel.gameBoard, self.__alreadyPrinted)
+        self.__alreadyPrinted = True
 
     def solve(self):
         self.__reached_states = []
-        self.solve_recursively([self.__gameModel.gameBoard])
+        self.__gameModel.__gameBoard = self.solve_recursively(
+            [self.__gameModel.gameBoard])
 
     def solve_recursively(self, moves, ):
         """
@@ -102,4 +106,4 @@ class GameController:
                         continue
                     self.__reached_states.append(moveboard)
                     moves.append(moveboard)
-        self.__gameView.printGameBoard(board)
+        self.__gameView.printGameBoard(board, True)

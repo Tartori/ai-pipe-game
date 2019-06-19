@@ -19,12 +19,12 @@ class GameView:
     def printNotANumberBetweenThreeAndSixEntered(self):
         print("You did not enter a number between 3 and 6. Try again.")
 
-    def printGameBoard(self, gameBoard: GameBoard):
+    def printGameBoard(self, gameBoard: GameBoard, should_be_done):
+        if not gameBoard.is_done and should_be_done:
+            print("Could not solve board.")
+            return
         print("Game Board:")
-        pprint(gameBoard.gameBoardList)
-        print("")
-        pprint(gameBoard.moves)
-        print("")
+        print()
         self.__printBoarderLine(gameBoard)
         for line in gameBoard.gameBoardList:
             self.__printGameBoardTopValuesFromLine(line)

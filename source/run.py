@@ -17,7 +17,6 @@ class Main:
         gameController.displayGameBoard()
 
         gameController.solve()
-        gameController.displayGameBoard()
 
 
 if __name__ == '__main__':
