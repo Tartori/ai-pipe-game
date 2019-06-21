@@ -33,16 +33,24 @@ class GameController:
                 break
             except WrongAnswerToYesNoQuestion:
                 self.__gameView.printWrongAnswerToYesNoQuestion()
-        if(answer == "no"):
+        if(self.__isStringValueNo(answer)):
             fieldsPerLine = self.__getFieldsPerLineFromUserInput()
 
-        #self.__gameModel.__gameBoard = GameBoard(fieldsPerLine)
         self.__gameModel.createGameBoard(fieldsPerLine)
         self.__gameModel.gameBoard.setInitialGameBoardState()
-        # print(self.__gameModel.gameBoard.gameBoardList)
+
+    def __isStringValueNo(self, stringValue):
+        if(stringValue == "no" or stringValue == "n"):
+            return True
+        return False
 
     def __isStringValueYesOrNo(self, inputString):
-        if(inputString == "y" or inputString == "yes" or inputString == "no"):
+        if(self.__isStringValueYes(inputString) or self.__isStringValueNo(inputString)):
+            return True
+        return False
+    
+    def __isStringValueYes(self, stringValue):
+        if(stringValue == "yes" or stringValue == "y"):
             return True
         return False
 
